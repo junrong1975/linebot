@@ -1,4 +1,4 @@
-const linebot = require('../index.js');
+const linebot = require('linebot');
 const express = require('express');
 
 const bot = linebot({
@@ -10,6 +10,9 @@ const bot = linebot({
 const app = express();
 
 const linebotParser = bot.parser();
+      app.get('/',function(req,res){
+        res.send("Hello World!);
+                 });
 
 app.post('/linewebhook', linebotParser);
 
