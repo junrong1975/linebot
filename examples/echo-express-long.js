@@ -1,4 +1,4 @@
-const linebot = require('../index.js');
+const linebot = require('linebot');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -8,21 +8,13 @@ const bot = linebot({
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN
 });
 
-const app = express();
+const app = bot.parser();
 
-const parser = bodyParser.json({
-  verify: function (req, res, buf, encoding) {
-    req.rawBody = buf.toString(encoding);
-  }
-});
+app.get('/',function(req,res) {
+   res.send("hello world!");
+})
 
-app.post('/linewebhook', parser, function (req, res) {
-  if (!bot.verify(req.rawBody, req.get('X-Line-Signature'))) {
-    return res.sendStatus(400);
-  }
-  bot.parse(req.body);
-  return res.json({});
-});
+app.post('/linewebhook', linebotparser);
 
 bot.on('message', function (event) {
   event.reply(event.message.text).then(function (data) {
